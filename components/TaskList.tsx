@@ -20,12 +20,23 @@ import {
 
 const initialTasks: Task[] = [];
 
+const taskCategories = [
+  "All",
+  "General",
+  "Work",
+  "Study",
+  "Personal",
+];
+
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [isLoaded, setIsLoaded] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedTitle, setEditedTitle] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [newTaskCategory, setNewTaskCategory] = useState("Personal");
 
   // Load saved tasks when the component mounts
   useEffect(() => {
@@ -60,12 +71,13 @@ export default function TaskList() {
     const task: Task = {
       id: Date.now(),
       title: trimmedTitle,
-      category: "Personal",
+      category: newTaskCategory,
       completed: false,
     };
 
     setTasks((previousTasks) => [...previousTasks, task]);
     setNewTask("");
+    setNewTaskCategory("Personal");
   };
 
   const handleToggleTask = (id: number) => {
@@ -143,6 +155,20 @@ export default function TaskList() {
           maxLength={100}
         />
 
+        <select
+          value={newTaskCategory}
+          onChange={(event) => setNewTaskCategory(event.target.value)}
+          className="task-category-select"
+        >
+          {taskCategories
+            .filter((category) => category !== "All")
+            .map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+        </select>
+
         <button
           className="add-task-button"
           type="submit"
@@ -153,13 +179,54 @@ export default function TaskList() {
         </button>
       </form>
 
+          <div className="task-filters">
+            {taskCategories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                className={`task-filter ${
+                  selectedCategory === category ? "active" : ""
+                }`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+          
+          <div className="task-status-filters">
+  {["All", "Active", "Completed"].map((status) => (
+    <button
+      key={status}
+      type="button"
+      className={`task-status-filter ${
+        selectedStatus === status ? "active" : ""
+      }`}
+      onClick={() => setSelectedStatus(status)}
+    >
+      {status}
+    </button>
+  ))}
+</div>
+
       <div className="task-list">
         {tasks.length === 0 ? (
           <div className="empty-tasks">
             <p>No tasks yet. Add one to get started!</p>
           </div>
         ) : (
-          tasks.map((task) => (
+          tasks.filter((task) => {
+  const matchesCategory =
+    selectedCategory === "All" ||
+    task.category === selectedCategory;
+
+  const matchesStatus =
+    selectedStatus === "All" ||
+    (selectedStatus === "Active" && !task.completed) ||
+    (selectedStatus === "Completed" && task.completed);
+
+  return matchesCategory && matchesStatus;
+}).map((task) => (
             <div className="task-item" key={task.id}>
               <div className="task-item-main">
                 <button
@@ -208,9 +275,13 @@ export default function TaskList() {
                     >
                       {task.title}
                     </span>
+
+                    
                   )}
 
-                  <span className="task-category">{task.category}</span>
+                  <span className={`task-category ${task.category.toLowerCase()}`}>
+  {task.category}
+</span>
                 </div>
               </div>
 

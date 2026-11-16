@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Timer from "@/components/Timer";
 import TaskList from "@/components/TaskList";
 import ProgressCard from "@/components/ProgressCard";
+import QuoteCard from "@/components/QuoteCard";
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
 
       <div className="dashboard-main">
         <Header />
-
+        <QuoteCard />
         <div className="dashboard-content">
           <div className="dashboard-primary">
             <Timer />

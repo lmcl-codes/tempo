@@ -12,6 +12,22 @@ const fraunces = Fraunces({
   subsets: ["latin"],
 });
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tempo — Find Your Rhythm",
+  description:
+    "A simple productivity workspace to manage tasks, stay focused, and build better work habits with Tempo.",
+  applicationName: "Tempo",
+  keywords: [
+    "Tempo",
+    "Pomodoro Timer",
+    "Productivity",
+    "Task Management",
+    "Focus Timer",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

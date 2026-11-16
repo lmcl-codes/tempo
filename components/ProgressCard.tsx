@@ -19,6 +19,7 @@ const DAILY_GOAL = 150;
 export default function ProgressCard() {
   const [sessions, setSessions] = useState<FocusSession[]>([]);
   const [today, setToday] = useState("");
+  const [period, setPeriod] = useState<7 | 30>(7);
 
   // Load today's date and saved sessions
   useEffect(() => {
@@ -58,6 +59,47 @@ export default function ProgressCard() {
     (total, session) => total + session.duration,
     0
   );
+
+  
+const periodData = Array.from({ length: period }, (_, index) => {
+  if (!today) {
+    return { label: "", minutes: 0 };
+  }
+
+  const [year, month, day] = today.split("-").map(Number);
+
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() - (period - 1 - index));
+
+  const dateKey = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+
+  const minutes = sessions
+    .filter((session) => session.date === dateKey)
+    .reduce((total, session) => total + session.duration, 0);
+
+  return {
+    label:
+      period === 7
+        ? date.toLocaleDateString("en-US", { weekday: "short" })
+        : String(date.getDate()),
+    minutes,
+  };
+});
+
+const maxWeeklyMinutes = Math.max(
+  ...periodData.map((day) => day.minutes),
+  1
+);
+
+const weeklyTotal = periodData.reduce(
+  (total, day) => total + day.minutes,
+  0
+);
+
 
   const goalProgress = Math.min(
     (totalFocusMinutes / DAILY_GOAL) * 100,
@@ -161,6 +203,58 @@ export default function ProgressCard() {
               : "You're making great progress. Keep it up!"}
         </p>
       </div>
+
+      <div className="weekly-progress">
+  <div className="weekly-progress-header">
+  <div>
+    <span className="section-eyebrow">YOUR PRODUCTIVITY</span>
+    <h3>{period === 7 ? "Last 7 Days" : "Last 30 Days"}</h3>
+  </div>
+
+  <div className="period-selector">
+    <button
+      type="button"
+      className={period === 7 ? "active" : ""}
+      onClick={() => setPeriod(7)}
+    >
+      7D
+    </button>
+
+    <button
+      type="button"
+      className={period === 30 ? "active" : ""}
+      onClick={() => setPeriod(30)}
+    >
+      30D
+    </button>
+  </div>
+</div>
+
+  <div className="weekly-chart">
+    {periodData.map((day, index) => (
+      <div className="weekly-chart-column" key={`${day.label}-${index}`}>
+        <span className="weekly-chart-value">
+          {day.minutes > 0
+            ? `${Number(day.minutes.toFixed(2))}m`
+            : ""}
+        </span>
+
+        <div className="weekly-chart-bar-container">
+          <div
+            className="weekly-chart-bar"
+            style={{
+              height: `${day.minutes > 0
+                ? Math.max((day.minutes / maxWeeklyMinutes) * 100, 5)
+                : 0}%`,
+            }}
+          />
+        </div>
+
+        <span className="weekly-chart-label">{day.label}</span>
+      </div>
+    ))}
+  </div>
+</div>
     </section>
   );
 }

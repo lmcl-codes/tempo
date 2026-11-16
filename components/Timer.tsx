@@ -14,7 +14,7 @@ type TimerMode = "focus" | "shortBreak" | "longBreak";
 const timerSettings = {
   focus: {
     label: "Focus",
-    duration: 10,
+    duration: 25 * 60,
     caption: "TIME TO FOCUS",
   },
   shortBreak: {
@@ -217,10 +217,6 @@ export default function Timer() {
           <RotateCcw size={17} />
         </button>
       </div>
-
-      <p className="timer-quote">
-        "Small steps lead to big things."
-      </p>
     </section>
   );
 }

@@ -1,4 +1,7 @@
 
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   Clock3,
   CheckCircle2,
@@ -6,28 +9,93 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-const progressStats = [
-  {
-    label: "Focus Time",
-    value: "1h 40m",
-    description: "Time spent focusing",
-    icon: Clock3,
-  },
-  {
-    label: "Sessions Completed",
-    value: "4",
-    description: "Pomodoro sessions",
-    icon: CheckCircle2,
-  },
-  {
-    label: "Daily Goal",
-    value: "67%",
-    description: "2.5 hours target",
-    icon: Target,
-  },
-];
+import {
+  FocusSession,
+  getFocusSessions,
+} from "@/lib/storage";
+
+const DAILY_GOAL = 150;
 
 export default function ProgressCard() {
+  const [sessions, setSessions] = useState<FocusSession[]>([]);
+  const [today, setToday] = useState("");
+
+  // Load today's date and saved sessions
+  useEffect(() => {
+    const getTodayKey = () => {
+      const date = new Date();
+
+      return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0"),
+      ].join("-");
+    };
+
+    const updateSessions = () => {
+      setSessions(getFocusSessions());
+    };
+
+    setToday(getTodayKey());
+    updateSessions();
+
+    // Listen for newly completed focus sessions
+    window.addEventListener("tempo-data-updated", updateSessions);
+
+    return () => {
+      window.removeEventListener("tempo-data-updated", updateSessions);
+    };
+  }, []);
+
+  // Filter sessions completed today
+  const todaySessions = sessions.filter(
+    (session) => session.date === today
+  );
+
+  const completedSessions = todaySessions.length;
+
+  const totalFocusMinutes = todaySessions.reduce(
+    (total, session) => total + session.duration,
+    0
+  );
+
+  const goalProgress = Math.min(
+    (totalFocusMinutes / DAILY_GOAL) * 100,
+    100
+  );
+
+  const formatFocusTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours === 0) return `${Number(remainingMinutes.toFixed(2))}m`;
+
+    if (remainingMinutes === 0) return `${hours}h`;
+
+    return `${hours}h ${remainingMinutes}m`;
+  };
+
+  const progressStats = [
+    {
+      label: "Focus Time",
+      value: formatFocusTime(totalFocusMinutes),
+      description: "Time spent focusing",
+      icon: Clock3,
+    },
+    {
+      label: "Sessions Completed",
+      value: String(completedSessions),
+      description: "Focus sessions today",
+      icon: CheckCircle2,
+    },
+    {
+      label: "Daily Goal",
+      value: `${Math.round(goalProgress)}%`,
+      description: "Of 150-minute target",
+      icon: Target,
+    },
+  ];
+
   return (
     <section className="progress-card" id="statistics">
       <div className="progress-header">
@@ -73,14 +141,25 @@ export default function ProgressCard() {
       <div className="daily-goal">
         <div className="daily-goal-header">
           <span>Daily focus goal</span>
-          <span>100 / 150 minutes</span>
+          <span>
+            {totalFocusMinutes.toFixed(2)} / {DAILY_GOAL} minutes
+          </span>
         </div>
 
         <div className="daily-goal-track">
-          <div className="daily-goal-fill"></div>
+          <div
+            className="daily-goal-fill"
+            style={{ width: `${goalProgress}%` }}
+          />
         </div>
 
-        <p>You're making great progress. Keep it up!</p>
+        <p>
+          {totalFocusMinutes >= DAILY_GOAL
+            ? "You've reached your daily focus goal. Well done!"
+            : totalFocusMinutes === 0
+              ? "Start your first focus session today!"
+              : "You're making great progress. Keep it up!"}
+        </p>
       </div>
     </section>
   );

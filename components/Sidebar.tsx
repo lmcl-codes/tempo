@@ -35,7 +35,7 @@ export default function Sidebar() {
         <div className="brand-icon">
           <Clock3 size={22} />
         </div>
-        <span>tempo.</span>
+        <span>Tempo</span>
       </div>
 
       <div className="sidebar-section">

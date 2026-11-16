@@ -252,6 +252,7 @@ header p:last-child {
   font-weight: 700;
   letter-spacing: -1px;
   color: var(--color-text);
+  font-family: var(--font-fraunces), serif;
 }
 
 .brand-icon {
@@ -447,6 +448,9 @@ header p:last-child {
   color: var(--color-muted);
   font-size: 12px;
   font-weight: 500;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
 }
 
 .timer-mode.active {
@@ -462,7 +466,7 @@ header p:last-child {
 }
 
 .timer-time {
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-fraunces), serif;
   font-size: clamp(64px, 10vw, 88px);
   font-weight: 500;
   letter-spacing: -5px;
@@ -511,14 +515,25 @@ header p:last-child {
 }
 
 .timer-start-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 10px;
   background-color: var(--color-primary);
   color: var(--color-white);
-  border-radius: 11px;
-  padding: 14px 38px;
-  font-size: 14px;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 600;
-  text-align: center;
-  min-width: 180px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.timer-start-button svg {
+  display: block;
+  flex-shrink: 0;
 }
 
 .timer-reset-button {
@@ -530,6 +545,9 @@ header p:last-child {
   align-items: center;
   justify-content: center;
   color: var(--color-muted);
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .timer-quote {
@@ -541,6 +559,12 @@ header p:last-child {
   margin: 25px 0 0;
 }
 
+.timer-cycle {
+  margin: 14px 0 0;
+  color: var(--color-muted);
+  font-size: 11px;
+  text-align: center;
+}
 
 /* =========================
    TASK LIST
@@ -636,8 +660,25 @@ header p:last-child {
 .task-checkbox {
   display: flex;
   align-items: center;
-  color: var(--color-primary);
+  justify-content: center;
   flex-shrink: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.task-checkbox:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.task-checkbox svg {
+  display: block;
 }
 
 .task-details {
@@ -969,3 +1010,107 @@ body {
   }
 }
 
+
+/* =========================
+   TASK MANAGEMENT
+========================= */
+
+.add-task-form {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 18px 0 10px;
+}
+
+.add-task-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid rgba(41, 43, 39, 0.12);
+  border-radius: 9px;
+  background-color: rgba(255, 255, 255, 0.55);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form input:focus,
+.task-edit-input:focus {
+  border-color: var(--color-primary);
+}
+
+.add-task-form input::placeholder {
+  color: var(--color-muted);
+}
+
+.add-task-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.task-details {
+  flex: 1;
+}
+
+.task-edit-input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid rgba(41, 43, 39, 0.15);
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.task-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.task-action-button:hover {
+  background-color: rgba(89, 105, 78, 0.1);
+  color: var(--color-primary);
+}
+
+.task-action-button.delete:hover {
+  background-color: rgba(190, 75, 65, 0.1);
+  color: #BE4B41;
+}
+
+.empty-tasks {
+  padding: 25px 10px;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(41, 43, 39, 0.08);
+  color: var(--color-muted);
+  font-size: 10px;
+}

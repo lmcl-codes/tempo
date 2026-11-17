@@ -200,10 +200,6 @@ header p:last-child {
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 75px;
-    padding: 25px 10px;
-  }
 
   .logo {
     font-size: 18px;
@@ -983,29 +979,6 @@ body {
 @media (max-width: 760px) {
   .dashboard {
     flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    min-height: auto;
-    padding: 16px 20px;
-  }
-
-  .sidebar-brand {
-    margin-bottom: 18px;
-  }
-
-  .sidebar-section {
-    margin-bottom: 10px;
-  }
-
-  .sidebar-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .sidebar-bottom {
-    display: none;
   }
 
   .dashboard-main {
@@ -2343,5 +2316,50 @@ textarea:hover {
 @media (max-width: 600px) {
   .about-tempo-footer {
     flex-direction: column;
+  }
+}
+
+
+/* =========================
+   SIDEBAR RESPONSIVE
+========================= */
+
+@media (max-width: 760px) {
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 16px 20px;
+  }
+
+  .sidebar-brand {
+    margin-bottom: 18px;
+  }
+
+  .sidebar-section {
+    margin-bottom: 10px;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+  }
+
+  .sidebar-bottom .nav-link {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 10px 12px;
+  }
+
+  .sidebar-footer {
+    display: none;
   }
 }

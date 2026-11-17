@@ -20,13 +20,13 @@ const navigation = [
   },
   {
     label: "Tasks",
-    href: "#tasks",
+    href: "/#tasks",
     id: "tasks",
     icon: CheckSquare,
   },
   {
     label: "Statistics",
-    href: "#statistics",
+    href: "/#statistics",
     id: "statistics",
     icon: ChartNoAxesColumnIncreasing,
   },
@@ -37,36 +37,42 @@ export default function Sidebar() {
   const [activeSection, setActiveSection] = useState("focus");
   
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleSections = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              b.intersectionRatio - a.intersectionRatio
-          );
+useEffect(() => {
+  const sections = navigation
+    .map((item) => document.getElementById(item.id))
+    .filter((section): section is HTMLElement => section !== null);
 
-        if (visibleSections.length > 0) {
-          setActiveSection(visibleSections[0].target.id);
-        }
-      },
-      {
-        rootMargin: "-15% 0px -55% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      }
-    );
+  const updateActiveSection = () => {
+    const detectionPoint = window.innerHeight * 0.25;
 
-    navigation.forEach((item) => {
-      const section = document.getElementById(item.id);
+    let currentSection = "focus";
 
-      if (section) {
-        observer.observe(section);
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+
+      if (rect.top <= detectionPoint) {
+        currentSection = section.id;
       }
     });
 
-    return () => observer.disconnect();
-  }, []);
+    setActiveSection(currentSection);
+  };
+
+  updateActiveSection();
+
+  window.addEventListener("scroll", updateActiveSection, {
+    passive: true,
+  });
+
+  window.addEventListener("resize", updateActiveSection);
+
+  return () => {
+    window.removeEventListener("scroll", updateActiveSection);
+    window.removeEventListener("resize", updateActiveSection);
+  };
+}, []);
+
+
 
   return (
     <aside className="sidebar">
@@ -102,7 +108,10 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar-bottom">
-        <a href="#help" className="nav-link">
+        <a
+          href="/help"
+          className={`nav-link ${pathname === "/help" ? "active" : ""}`}
+        >
           <CircleHelp size={19} strokeWidth={1.8} />
           <span>Help & Support</span>
         </a>

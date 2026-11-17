@@ -1,6 +1,8 @@
 
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
+import ThemeProvider from "@/components/ThemeProvider";
+import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,9 +36,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${fraunces.variable}`}>
-        {children}
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+            (function () {
+              try {
+                const savedSettings = localStorage.getItem("tempo-timer-settings");
+                const settings = savedSettings ? JSON.parse(savedSettings) : {};
+
+                document.documentElement.setAttribute(
+                  "data-theme",
+                  settings.darkMode ? "dark" : "light"
+                );
+              } catch {
+                document.documentElement.setAttribute("data-theme", "light");
+              }
+            })();
+          `}
+        </Script>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

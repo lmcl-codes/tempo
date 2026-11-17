@@ -92,3 +92,46 @@ export function saveCompletedFocusSessions(count: number) {
 
   localStorage.setItem(CYCLE_KEY, String(count));
 }
+
+
+export type TimerSettings = {
+  focusDuration: number;
+  shortBreakDuration: number;
+  longBreakDuration: number;
+  dailyGoal: number;
+  soundEnabled: boolean;
+  darkMode: boolean;
+};
+
+export const DEFAULT_TIMER_SETTINGS: TimerSettings = {
+  focusDuration: 25,
+  shortBreakDuration: 5,
+  longBreakDuration: 15,
+  dailyGoal: 150,
+  soundEnabled: true,
+  darkMode: false,
+};
+
+const TIMER_SETTINGS_KEY = "tempo-timer-settings";
+
+export function getTimerSettings(): TimerSettings {
+  if (typeof window === "undefined") {
+    return DEFAULT_TIMER_SETTINGS;
+  }
+
+  try {
+    const savedSettings = localStorage.getItem(TIMER_SETTINGS_KEY);
+
+    return savedSettings
+      ? { ...DEFAULT_TIMER_SETTINGS, ...JSON.parse(savedSettings) }
+      : DEFAULT_TIMER_SETTINGS;
+  } catch {
+    return DEFAULT_TIMER_SETTINGS;
+  }
+}
+
+export function saveTimerSettings(settings: TimerSettings) {
+  if (typeof window === "undefined") return;
+
+  localStorage.setItem(TIMER_SETTINGS_KEY, JSON.stringify(settings));
+}

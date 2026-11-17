@@ -12,11 +12,12 @@ import {
 import {
   FocusSession,
   getFocusSessions,
+  getTimerSettings,
 } from "@/lib/storage";
 
-const DAILY_GOAL = 150;
 
 export default function ProgressCard() {
+  const [dailyGoal, setDailyGoal] = useState(150);
   const [sessions, setSessions] = useState<FocusSession[]>([]);
   const [today, setToday] = useState("");
   const [period, setPeriod] = useState<7 | 30>(7);
@@ -38,6 +39,7 @@ export default function ProgressCard() {
     };
 
     setToday(getTodayKey());
+    setDailyGoal(getTimerSettings().dailyGoal);
     updateSessions();
 
     // Listen for newly completed focus sessions
@@ -102,7 +104,7 @@ const weeklyTotal = periodData.reduce(
 
 
   const goalProgress = Math.min(
-    (totalFocusMinutes / DAILY_GOAL) * 100,
+    (totalFocusMinutes / dailyGoal) * 100,
     100
   );
 
@@ -133,7 +135,7 @@ const weeklyTotal = periodData.reduce(
     {
       label: "Daily Goal",
       value: `${Math.round(goalProgress)}%`,
-      description: "Of 150-minute target",
+      description: `Of ${dailyGoal}-minute target`,
       icon: Target,
     },
   ];
@@ -184,7 +186,7 @@ const weeklyTotal = periodData.reduce(
         <div className="daily-goal-header">
           <span>Daily focus goal</span>
           <span>
-            {totalFocusMinutes.toFixed(2)} / {DAILY_GOAL} minutes
+            {totalFocusMinutes.toFixed(2)} / {dailyGoal} minutes
           </span>
         </div>
 
@@ -196,7 +198,7 @@ const weeklyTotal = periodData.reduce(
         </div>
 
         <p>
-          {totalFocusMinutes >= DAILY_GOAL
+          {totalFocusMinutes >= dailyGoal
             ? "You've reached your daily focus goal. Well done!"
             : totalFocusMinutes === 0
               ? "Start your first focus session today!"

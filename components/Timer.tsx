@@ -7,38 +7,79 @@ import {
   saveFocusSession,
   getCompletedFocusSessions,
   saveCompletedFocusSessions,
+  getTimerSettings,
+  DEFAULT_TIMER_SETTINGS,
+  TimerSettings,
 } from "@/lib/storage";
 
 type TimerMode = "focus" | "shortBreak" | "longBreak";
-
-const timerSettings = {
-  focus: {
-    label: "Focus",
-    duration: 25 * 60,
-    caption: "TIME TO FOCUS",
-  },
-  shortBreak: {
-    label: "Short Break",
-    duration: 5 * 60,
-    caption: "TAKE A BREATHER",
-  },
-  longBreak: {
-    label: "Long Break",
-    duration: 15 * 60,
-    caption: "TIME TO RECHARGE",
-  },
-};
 
 const SESSIONS_BEFORE_LONG_BREAK = 4;
 
 export default function Timer() {
   const [mode, setMode] = useState<TimerMode>("focus");
-  const [seconds, setSeconds] = useState(timerSettings.focus.duration);
+  const [seconds, setSeconds] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [completedFocusSessions, setCompletedFocusSessions] = useState(0);
   const [cycleLoaded, setCycleLoaded] = useState(false);
 
+  const [durations, setDurations] = useState<TimerSettings>(
+    DEFAULT_TIMER_SETTINGS
+  );
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
   const completionHandled = useRef(false);
+
+  const timerSettings = {
+    focus: {
+      label: "Focus",
+      duration: durations.focusDuration * 60,
+      caption: "TIME TO FOCUS",
+    },
+    shortBreak: {
+      label: "Short Break",
+      duration: durations.shortBreakDuration * 60,
+      caption: "TAKE A BREATHER",
+    },
+    longBreak: {
+      label: "Long Break",
+      duration: durations.longBreakDuration * 60,
+      caption: "TIME TO RECHARGE",
+    },
+  };
+
+  const playNotificationSound = () => {
+    if (!soundEnabled) return;
+
+    const audioContext = new window.AudioContext();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = 660;
+
+    gainNode.gain.value = 0.08;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.3);
+
+    oscillator.onended = () => {
+      audioContext.close();
+    };
+  };
+
+  useEffect(() => {
+    const savedSettings = getTimerSettings();
+
+    setDurations(savedSettings);
+    setSoundEnabled(savedSettings.soundEnabled);
+    setSeconds(savedSettings.focusDuration * 60);
+    setSettingsLoaded(true);
+  }, []);
 
   useEffect(() => {
     setCompletedFocusSessions(getCompletedFocusSessions());
@@ -64,10 +105,13 @@ export default function Timer() {
   }, [isRunning, seconds]);
 
   useEffect(() => {
-    if (seconds !== 0 || completionHandled.current) return;
+    if (!settingsLoaded || seconds !== 0 || completionHandled.current) {
+      return;
+    }
 
     completionHandled.current = true;
     setIsRunning(false);
+    playNotificationSound();
 
     if (mode === "focus") {
       saveFocusSession(currentDuration / 60);
@@ -92,7 +136,7 @@ export default function Timer() {
       setSeconds(timerSettings.focus.duration);
       completionHandled.current = false;
     }
-  }, [seconds, mode, currentDuration]);
+  }, [seconds, mode, currentDuration, settingsLoaded]);
 
   const handleModeChange = (newMode: TimerMode) => {
     setIsRunning(false);

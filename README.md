@@ -1,45 +1,78 @@
-# Tempo ⏱️
+# Tempo — Find Your Rhythm.
 
-**Find your rhythm.**
+A Pomodoro timer and productivity web application designed to help you stay focused, organize your tasks, and build better work habits.
 
-Tempo is a web-based productivity application designed to help users stay focused, manage daily tasks, and build better work habits through the Pomodoro Technique.
+**[Live Demo](https://focus-with-tempo.vercel.app/)**
 
-## ✨ Features
+<img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/a08dedbd-21b9-4925-9999-a98a350c5f16" />
+<img width="1920" height="1080" alt="4" src="https://github.com/user-attachments/assets/932f938e-7c03-41c3-befb-58eceb222e09" />
+<img width="1920" height="1080" alt="5" src="https://github.com/user-attachments/assets/c1e6c4b4-caf9-42b4-80bb-f2860cb62920" />
 
-- **Pomodoro Timer** – Manage focus sessions, short breaks, and long breaks.
-- **Task Management** – Create, organize, and track daily tasks.
-- **Productivity Statistics** – Monitor completed focus sessions and total focus time.
-- **Customizable Experience** – Enjoy a clean and distraction-free interface.
 
-*Note: Features are currently under development.*
+## Overview
 
-## 🛠️ Tech Stack
+Tempo is a productivity application built around the Pomodoro Technique. It combines a customizable focus timer, task management, and productivity statistics in one simple, thoughtfully designed interface.
 
-- **Framework:** Next.js
-- **Frontend Library:** React
-- **Programming Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Data Storage:** LocalStorage
-- **Version Control:** Git and GitHub
+Whether you're studying, working, or managing personal projects, Tempo helps you make time for what matters.
 
-## 🚀 Getting Started
+## Features
 
-Follow these instructions to run Tempo locally.
+### Focus Timer
+- Customizable Focus, Short Break, and Long Break durations.
+- Start, pause, resume, and reset controls.
+- Automatic session transitions.
+- Long Break after every four completed Focus sessions.
+- Optional timer completion notification sounds.
+
+### Task Management
+- Create, edit, and delete tasks.
+- Mark tasks as completed or active.
+- Organize tasks into categories: General, Work, Study, and Personal.
+- Filter tasks by completion status and category.
+
+### Productivity Statistics
+- Track completed focus sessions and total focus time.
+- Monitor daily progress against a customizable focus goal.
+- View productivity trends through 7-day and 30-day statistics.
+
+### Personalization
+- Customize timer durations and daily focus goals.
+- Toggle notification sounds.
+- Switch between Light Mode and Dark Mode.
+- Reset productivity data while retaining personal settings.
+
+### Help & Support
+- Getting Started guide.
+- Interactive Frequently Asked Questions.
+- Productivity tips.
+- Application information.
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Next.js | React framework and application routing |
+| React | Component-based user interface |
+| TypeScript | Type safety and maintainability |
+| CSS | Styling and responsive layouts |
+| Lucide React | Interface icons |
+| LocalStorage | Client-side data persistence |
+| Vercel | Deployment and hosting |
+
+## Getting Started
 
 ### Prerequisites
 
-Make sure you have the following installed:
-
-- [Node.js](https://nodejs.org/)
-- npm (included with Node.js)
-- [Git](https://git-scm.com/)
+- Node.js
+- npm
+- Git
 
 ### Installation
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/lmcl-codes/tempo.git
+   git clone YOUR_GITHUB_REPOSITORY_URL
    ```
 
 2. Navigate to the project directory:
@@ -62,36 +95,43 @@ Make sure you have the following installed:
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 📁 Project Structure
+### Production Build
 
-```text
-tempo/
-├── public/
-├── src/
-│   └── app/
-│       ├── globals.css
-│       ├── layout.tsx
-│       └── page.tsx
-├── package.json
-└── README.md
+To create an optimized production build:
+
+```bash
+npm run build
 ```
 
-## 🎯 Project Goals
+To run the production version locally:
 
-Tempo aims to provide a simple and accessible productivity experience by combining time management, task organization, and productivity tracking in one application.
+```bash
+npm run start
+```
 
-This project also serves as an opportunity to explore modern web development practices, component-based architecture, and API integration.
+## Data Storage
 
-## 📌 Project Status
+Tempo uses the browser's LocalStorage API to save tasks, timer preferences, and focus session history.
 
-**In Development** 🚧
+Data is stored locally in the user's browser and is not synchronized across devices or browsers. Clearing browser storage may remove saved application data.
 
-More features and improvements will be introduced as development progresses.
+## Design
 
-## 👨‍💻 Author
+Tempo features a warm, minimalist interface with a sage-inspired color palette, complemented by the Inter and Fraunces typefaces.
 
-Developed by **lmcl-codes**.
+The application supports responsive layouts and Light and Dark Modes to provide a comfortable experience across different screen sizes.
+
+## Future Improvements
+
+- Enhanced productivity insights and statistics.
+- Additional timer customization options.
+- Further accessibility improvements.
+
+## Acknowledgments
+
+- [Lucide](https://lucide.dev/) for the icon library.
+- [Vercel](https://vercel.com/) for application deployment.
 
 ---
 
-*Tempo — Focus. Rest. Repeat.*
+**Tempo — Find your rhythm. Make time for what matters.**

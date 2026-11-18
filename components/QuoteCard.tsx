@@ -21,7 +21,7 @@ export default function QuoteCard() {
       setError("");
 
       const response = await fetch(
-        "https://dummyjson.com/quotes/random"
+        "https://quoteslate.vercel.app/api/quotes/random?tags=motivation"
       );
 
       if (!response.ok) {

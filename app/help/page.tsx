@@ -270,6 +270,18 @@ const productivityTips = [
       <span>Made for mindful productivity.</span>
     </div>
   </div>
+
+  <p className="about-attribution">
+  Quotes powered by{" "}
+  <a
+    href="https://quoteslate.vercel.app/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    QuoteSlate
+  </a>
+  .
+</p>
 </section>
 
 </div>

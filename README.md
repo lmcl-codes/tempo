@@ -72,7 +72,7 @@ Whether you're studying, working, or managing personal projects, Tempo helps you
 1. Clone the repository:
 
    ```bash
-   git clone YOUR_GITHUB_REPOSITORY_URL
+   git clone https://github.com/lmcl-codes/tempo.git
    ```
 
 2. Navigate to the project directory:
@@ -131,6 +131,7 @@ The application supports responsive layouts and Light and Dark Modes to provide 
 
 - [Lucide](https://lucide.dev/) for the icon library.
 - [Vercel](https://vercel.com/) for application deployment.
+- [QuoteSlate](https://quoteslate.vercel.app/) – Provides motivational quotes displayed in Tempo.
 
 ---
 
